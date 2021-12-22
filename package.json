@@ -4,11 +4,11 @@
   "description": "Implementação da arquitetura limpa com funções.",
   "main": "index.js",
   "scripts": {
-    "start": "node build/src/api/app.js",
+    "start": "node build/api/app.js",
     "test": "jest --coverage",
     "lint": "gts lint",
     "clean": "gts clean",
-    "compile": "tsc",
+    "compile": "tsc -p tsconfig-prod.json",
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
