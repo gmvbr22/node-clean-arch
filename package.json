@@ -4,6 +4,7 @@
   "description": "Implementação da arquitetura limpa com funções.",
   "main": "index.js",
   "scripts": {
+    "start": "node build/src/api/app.js",
     "test": "jest --coverage",
     "lint": "gts lint",
     "clean": "gts clean",
@@ -25,6 +26,7 @@
   },
   "homepage": "https://github.com/gmvbr/node-clean-arch#readme",
   "dependencies": {
+    "env-schema": "^3.5.1",
     "fastify": "^3.25.1",
     "fastify-sensible": "^3.1.2",
     "fluent-json-schema": "^3.0.1",
