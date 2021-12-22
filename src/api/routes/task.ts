@@ -4,7 +4,37 @@ import {ITaskService} from '../../pkg/task/service';
 import {RouterOptions} from '../utils/fastify';
 
 export function TaskRouter(app: FastifyInstance, task: ITaskService) {
+  app.route(getTask(task));
   app.route(addTask(task));
+}
+
+function getTask(task: ITaskService): RouterOptions<{
+  Querystring: {
+    page: number;
+    limit: number;
+  };
+}> {
+  return {
+    url: '/task',
+    method: 'GET',
+    schema: {
+      querystring: S.object()
+        .prop('page', S.integer().minimum(1).required())
+        .prop(
+          'limit',
+          S.integer().minimum(10).maximum(40).default(10).required()
+        ),
+    },
+    handler: async function (req, reply) {
+      try {
+        const {page, limit} = req.query;
+        const result = await task.getTaskPage(page, limit);
+        return {success: true, ...result};
+      } catch (e) {
+        return reply.internalServerError();
+      }
+    },
+  };
 }
 
 function addTask(task: ITaskService): RouterOptions<{
