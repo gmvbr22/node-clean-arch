@@ -1,24 +1,34 @@
-import fastify from 'fastify';
+import fastify, {FastifyInstance} from 'fastify';
+
+import fastifyHelmet from 'fastify-helmet';
 import fastifySensible from 'fastify-sensible';
 
 import envSchema from 'env-schema';
-import {MongoClient} from 'mongodb';
+import {Db, MongoClient} from 'mongodb';
 
 import {TaskRepository} from '../pkg/task/repository';
 import {TaskService} from '../pkg/task/service';
 import {TaskRouter} from './routes/task';
 
 async function main() {
-  const config = getConfig();
-  const {database} = await initDB(config.MONGO_URL);
+  const {PORT, HOST, MONGO_URL} = getConfig();
+  const {db} = await initDB(MONGO_URL);
 
-  const app = fastify().register(fastifySensible);
+  const app = fastify();
 
-  const taskRepository = new TaskRepository(database.collection('task'));
+  app.register(fastifySensible);
+  app.register(fastifyHelmet);
+
+  initApp(app, db);
+
+  return app.listen(PORT, HOST);
+}
+
+function initApp(app: FastifyInstance, db: Db) {
+  const taskRepository = new TaskRepository(db.collection('task'));
   const taskService = new TaskService(taskRepository);
-  TaskRouter(app, taskService);
 
-  await app.listen(config.PORT, config.HOST);
+  TaskRouter(app, taskService);
 }
 
 function getConfig() {
@@ -44,7 +54,7 @@ async function initDB(url: string) {
   const client = await MongoClient.connect(url);
   return {
     client,
-    database: client.db(),
+    db: client.db(),
   };
 }
 
