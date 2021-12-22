@@ -1,7 +1,7 @@
 import S from 'fluent-json-schema';
 import {FastifyInstance} from 'fastify';
 import {ITaskService} from '../../pkg/task/service';
-import {RouterOptions} from '../utils/fastify';
+import {RouterOptions} from '../fastify';
 
 export function TaskRouter(app: FastifyInstance, task: ITaskService) {
   app.route(getTask(task));
