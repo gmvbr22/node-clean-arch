@@ -27,6 +27,7 @@
   "dependencies": {
     "fastify": "^3.25.1",
     "fastify-sensible": "^3.1.2",
+    "fluent-json-schema": "^3.0.1",
     "gts": "^3.1.0",
     "mongodb": "^4.2.2"
   },
